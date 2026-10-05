@@ -1,0 +1,734 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GlobalRisk | Live Global Risk Monitor & World News</title>
+  <meta name="description" content="GlobalRisk is a real-time global risk monitoring platform for breaking world news, natural disasters, conflict, weather alerts, aviation activity, and live global events." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="GlobalRisk" />
+  <meta name="keywords" content="global risk monitor, world news, live crisis map, natural disasters, severe weather, conflict monitoring, aviation activity, global alerts" />
+  <meta name="canonical" content="https://globalrisk.site/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="GlobalRisk | Live Global Risk Monitor & World News" />
+  <meta property="og:description" content="Track global risk events in real time, including conflicts, disasters, weather alerts, aviation activity, and live global news." />
+  <meta property="og:url" content="https://globalrisk.site/" />
+  <meta property="og:image" content="https://globalrisk.site/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GlobalRisk | Live Global Risk Monitor & World News" />
+  <meta name="twitter:description" content="GlobalRisk tracks global incidents, disasters, and breaking world news in near real time." />
+  <meta name="twitter:image" content="https://globalrisk.site/og-image.svg" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%2338e1ff' stroke-width='6'/><circle cx='50' cy='50' r='10' fill='%23ff4d5e'/></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="canonical" href="https://globalrisk.site/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "GlobalRisk",
+    "url": "https://globalrisk.site/",
+    "description": "Real-time global risk monitoring for conflicts, natural disasters, severe weather, aviation activity, and world news.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "GlobalRisk"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://globalrisk.site/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1863473523633296"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="globe" aria-hidden="true"></div>
+      <div>
+        <h1>GLOBALRISK </h1>
+        <div class="sub">Real-time Global Risk Monitoring</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="readout">
+      <div class="cell hide-sm">
+        <span class="k">Countries</span>
+        <span class="v" id="stat-countries">—</span>
+      </div>
+      <div class="cell hide-sm">
+        <span class="k">Feeds</span>
+        <span class="v" id="stat-feeds">—</span>
+      </div>
+      <div class="cell">
+        <span class="k">UTC</span>
+        <span class="v clock" id="clock">--:--:--</span>
+      </div>
+    </div>
+    <div class="live-pill"><span class="dot"></span>LIVE</div>
+    <button class="btn" id="refresh-btn" title="Refresh all feeds">
+      <svg class="i spin-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v5h-5" />
+      </svg> Refresh
+    </button>
+    <button class="btn icon-btn" id="alerts-btn" title="Alert console — get pushed when it matters"
+      aria-label="Alert console">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+      </svg>
+      <span class="alerts-dot" id="alerts-dot" hidden></span>
+    </button>
+    <button class="btn icon-btn" id="wanted-btn" title="Public wanted notices — INTERPOL &amp; FBI"
+      aria-label="Wanted notices">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3l7 3v5c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6z" />
+        <circle cx="12" cy="10" r="2" />
+        <path d="M8.6 15.4a3.5 3.5 0 0 1 6.8 0" />
+      </svg>
+    </button>
+    <button class="btn icon-btn" id="missing-btn" title="Missing persons — INTERPOL public appeals"
+      aria-label="Missing persons">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <circle cx="11" cy="9.2" r="2" />
+        <path d="M7.7 14.6a3.6 3.6 0 0 1 6.6 0" />
+        <path d="M16.5 16.5L21 21" />
+      </svg>
+    </button>
+  </header>
+
+  <!-- Hidden from assistive tech on purpose: this is a redundant visual summary of
+     headlines that are already reachable in the hazard feed and news wire, and it
+     duplicates each item again to make the marquee loop seamlessly. Announcing a
+     90-second scroll of repeated text would be noise, not information. -->
+  <div class="ticker" id="ticker" aria-hidden="true">
+    <div class="tag">Breaking</div>
+    <div class="track-wrap">
+      <div class="track" id="ticker-track"></div>
+    </div>
+  </div>
+
+  <!-- "What's new since I last looked" — driven by server event history -->
+  <div class="whatsnew" id="whatsnew" hidden role="status" aria-live="polite">
+    <div class="wn-bar">
+      <svg class="wn-ico i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+      </svg>
+      <span class="wn-txt" id="wn-txt"></span>
+      <button class="wn-btn wn-view" id="wn-view" type="button">Review</button>
+      <button class="wn-btn wn-close" id="wn-close" type="button">Mark seen</button>
+    </div>
+    <div class="wn-list" id="wn-list" hidden></div>
+  </div>
+
+  <aside class="country-drawer" id="country-drawer" aria-hidden="true">
+    <div class="cd-header">
+      <span class="cd-flag" id="cd-flag"></span>
+      <div class="cd-titles">
+        <h2 id="cd-name">—</h2>
+        <div class="cd-sub">Country intelligence</div>
+      </div>
+      <button class="cd-translate" id="cd-translate" type="button" title="Translate headlines to English"
+        aria-label="Translate headlines" aria-pressed="false">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 5h10M8 3v2M5 5c0 5 4 9 8 11M11 5c-1 5-4.5 9-8 11" />
+          <path d="M13 21l4.5-10L22 21M14.8 17h5.4" />
+        </svg>
+      </button>
+      <button class="cd-close" id="cd-close" title="Close" aria-label="Close">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+    <div class="cd-body" id="cd-body"></div>
+  </aside>
+
+  <aside class="alert-drawer" id="alert-drawer" aria-hidden="true">
+    <div class="drw-header">
+      <span class="drw-flag"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+        </svg></span>
+      <div class="cd-titles">
+        <h2>Alert Console</h2>
+        <div class="cd-sub">Get pushed when it matters — even with the tab closed</div>
+      </div>
+      <button class="cd-close" id="drw-close" title="Close" aria-label="Close">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+    <div class="drw-body">
+      <div class="drw-enable">
+        <div class="ade-txt">
+          <b>Push notifications</b>
+          <span id="drw-perm-state">Off</span>
+        </div>
+        <button class="switch" id="drw-toggle" role="switch" aria-checked="false" type="button"><span
+            class="knob"></span></button>
+      </div>
+      <div class="drw-note" id="drw-note" hidden></div>
+
+      <div class="drw-section-lbl">Alert me about</div>
+      <div class="drw-rules">
+        <div class="rule">
+          <label class="rule-head"><input type="checkbox" id="r-quake"><span class="rl-dot q"></span>Earthquakes</label>
+          <div class="rule-ctl">≥ <select id="r-quake-mag" class="mini-select"></select></div>
+        </div>
+        <div class="rule">
+          <label class="rule-head"><input type="checkbox" id="r-alert"><span class="rl-dot a"></span>Severe disaster
+            alerts</label>
+          <div class="rule-ctl">
+            <select id="r-alert-sev" class="mini-select">
+              <option value="high">Orange &amp; Red</option>
+              <option value="extreme">Red only</option>
+            </select>
+            <label class="mini-check"><input type="checkbox" id="r-alert-watch"> watchlist only</label>
+          </div>
+        </div>
+        <div class="rule">
+          <label class="rule-head"><input type="checkbox" id="r-cyclone"><span class="rl-dot w"></span>Tropical
+            cyclones</label>
+          <div class="rule-ctl">≥ Cat <select id="r-cyclone-cat" class="mini-select"></select></div>
+        </div>
+        <div class="rule">
+          <label class="rule-head"><input type="checkbox" id="r-event"><span class="rl-dot e"></span>Natural
+            events</label>
+          <div class="rule-ctl rl-hint">wildfires, volcanoes, floods…</div>
+        </div>
+      </div>
+
+      <div class="drw-section-lbl">Watchlist countries <span class="drw-lbl-hint">(for “watchlist only” +
+          activity)</span></div>
+      <div class="drw-watch">
+        <select id="drw-watch-select" class="mini-select wide">
+          <option value="">Add a country…</option>
+        </select>
+        <div class="drw-watch-chips" id="drw-watch-chips"></div>
+      </div>
+
+      <div class="drw-actions">
+        <button class="btn" id="drw-test" type="button">Send test</button>
+        <span class="drw-status" id="drw-status"></span>
+      </div>
+      <div class="drw-hint">“Send test” pushes a sample notification to this device — the same way real alerts arrive,
+        even with the tab closed.</div>
+
+      <div class="drw-section-lbl">Recent activity <span class="drw-feed-badge" id="drw-feed-badge" hidden></span>
+        <label class="mini-check drw-feed-filter"><input type="checkbox" id="drw-feed-mine"> only my rules</label>
+      </div>
+      <div class="drw-feed" id="drw-feed">
+        <div class="drw-feed-empty">Loading…</div>
+      </div>
+
+      <div class="drw-foot">Alerts are sent by the always-on background monitor. Rules are stored per device.</div>
+    </div>
+  </aside>
+
+  <aside class="wanted-drawer" id="wanted-drawer" aria-hidden="true">
+    <div class="drw-header">
+      <span class="drw-flag"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l7 3v5c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6z" />
+          <circle cx="12" cy="10" r="2" />
+          <path d="M8.6 15.4a3.5 3.5 0 0 1 6.8 0" />
+        </svg></span>
+      <div class="cd-titles">
+        <h2>Wanted — Public Notices</h2>
+        <div class="cd-sub">INTERPOL Red Notices · FBI Most Wanted</div>
+      </div>
+      <button class="cd-close" id="wanted-close" title="Close" aria-label="Close">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+    <div class="wanted-body">
+      <div class="wanted-note">Official law-enforcement appeals, shown for public awareness. Everyone is <b>presumed
+          innocent</b> unless convicted by a court. <b>Do not approach anyone</b> — report information only to the
+        issuing authority via the official link.</div>
+      <div class="wanted-controls">
+        <div class="wanted-tabs" id="wanted-tabs">
+          <button class="wtab active" data-src="all" type="button">All</button>
+          <button class="wtab" data-src="interpol" type="button">INTERPOL</button>
+          <button class="wtab" data-src="fbi" type="button">FBI</button>
+        </div>
+        <input id="wanted-search" class="wanted-search" placeholder="Search name…" autocomplete="off" />
+      </div>
+      <div class="wanted-count" id="wanted-count"></div>
+      <div class="wanted-list" id="wanted-list"></div>
+    </div>
+  </aside>
+
+  <aside class="wanted-drawer missing-drawer" id="missing-drawer" aria-hidden="true">
+    <div class="drw-header">
+      <span class="drw-flag"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <circle cx="11" cy="9.2" r="2" />
+          <path d="M7.7 14.6a3.6 3.6 0 0 1 6.6 0" />
+          <path d="M16.5 16.5L21 21" />
+        </svg></span>
+      <div class="cd-titles">
+        <h2>Missing Persons</h2>
+        <div class="cd-sub">INTERPOL Yellow Notices · public appeals</div>
+      </div>
+      <button class="cd-close" id="missing-close" title="Close" aria-label="Close">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+    <div class="wanted-body">
+      <div class="missing-note">Official INTERPOL appeals to help <b>locate missing people</b>. If you have any
+        information, please contact INTERPOL or your local police via the official link.</div>
+      <div class="wanted-controls">
+        <input id="missing-search" class="wanted-search" placeholder="Search name…" autocomplete="off" />
+      </div>
+      <div class="wanted-count" id="missing-count"></div>
+      <div class="wanted-list" id="missing-list"></div>
+    </div>
+  </aside>
+
+  <div class="wanted-modal" id="wanted-modal" hidden aria-hidden="true">
+    <div class="wm-backdrop" id="wm-backdrop"></div>
+    <div class="wm-card" id="wm-card" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <!-- Story reader: headline, outlet, and the same event as reported by every
+     other outlet carrying it. Article text is never reproduced here. -->
+  <div class="news-modal" id="news-modal" hidden aria-hidden="true">
+    <div class="nm-backdrop" id="nm-backdrop"></div>
+    <div class="nm-card" id="nm-card" role="dialog" aria-modal="true" aria-labelledby="nm-title"></div>
+  </div>
+
+  <div class="wrap">
+    <!-- MAP + COUNTRY PANEL -->
+    <div class="map-grid">
+      <section class="panel map-panel" id="sec-map">
+        <div class="panel-head">
+          <span class="hd-ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="8" />
+              <circle cx="12" cy="12" r="2" />
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+            </svg></span>
+          <h2>Live Global Map</h2>
+          <span class="count" id="map-count">plotting…</span>
+        </div>
+        <div class="map-stage" id="map-stage">
+          <svg id="map" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="sat-legend" id="sat-legend">
+            <span class="cap">Live satellites</span>
+            <span class="row"><span class="dot"
+                style="background:#7fe3ff;box-shadow:0 0 5px #7fe3ff"></span>Starlink</span>
+            <span class="row"><span class="dot" style="background:#ffd54a;box-shadow:0 0 5px #ffd54a"></span>ISS &amp;
+              stations</span>
+            <span class="row"><span class="dot"
+                style="background:#9a7bff;box-shadow:0 0 5px #9a7bff"></span>OneWeb</span>
+            <span class="row"><span class="dot" style="background:#5ce08c;box-shadow:0 0 5px #5ce08c"></span>GPS /
+              nav</span>
+          </div>
+          <div class="map-tooltip" id="map-tooltip"></div>
+          <div class="event-detail" id="event-detail" hidden></div>
+          <div class="cam-card" id="cam-card" hidden></div>
+
+          <!-- Right-hand stacks: panels flow down/up instead of stacking on top of
+           each other, so any combination of them can be open at once. -->
+          <div class="map-stack right">
+            <div class="flight-card" id="flight-card" hidden></div>
+            <div class="storm-list" id="storm-list">
+              <div class="sl-head"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="1.4" />
+                  <path d="M12 8a4 4 0 0 1 4 4M12 16a4 4 0 0 1-4-4" />
+                  <path d="M12 4a8 8 0 0 1 8 8M12 20a8 8 0 0 1-8-8" />
+                </svg> Active Storms<span id="storm-count"></span></div>
+              <div class="sl-body" id="storm-list-body"></div>
+            </div>
+            <div class="map-stack-sp"></div>
+            <div class="cam-legend" id="cam-legend">
+              <span class="cap">Traffic cameras</span>
+              <span class="cl-row"><span class="cl-dot live"></span>Live video</span>
+              <span class="cl-row"><span class="cl-dot"></span>Still image</span>
+              <span class="cl-note" id="cam-note"></span>
+            </div>
+            <div class="flight-legend" id="flight-legend">
+              <span class="cap">Live flights · altitude</span>
+              <span class="fl-ramp"></span>
+              <span class="fl-scale"><span>ground</span><span>FL200</span><span>FL450+</span></span>
+              <span class="fl-note" id="flight-note"></span>
+            </div>
+          </div>
+          <div class="map-scale" id="map-scale"><span class="ms-bar"></span><span class="ms-txt"></span></div>
+          <div class="map-credit" id="map-credit"></div>
+        </div>
+        <div class="map-side" id="map-side">
+          <div class="ms-head">
+            <span class="ms-title">Map controls</span>
+            <button class="ms-exit" id="map-exit-fs" type="button" title="Exit full screen (Esc)">Exit ⤡</button>
+          </div>
+          <div class="ms-slot" id="map-side-slot"></div>
+        </div>
+        <div class="map-toolbar" id="map-toolbar">
+          <span class="mode-seg">
+            <button id="mode-globe" class="active" type="button">Globe</button>
+            <button id="mode-flat" type="button">Flat</button>
+          </span>
+          <span class="layer-toggle q" data-layer="quakes"><span class="swatch"></span>Earthquakes</span>
+          <span class="layer-toggle e" data-layer="events"><span class="swatch"></span>Natural Events</span>
+          <span class="layer-toggle a" data-layer="alerts"><span class="swatch"></span>Disaster Alerts</span>
+          <span class="layer-toggle fr off" id="toggle-fires"
+            title="NASA FIRMS active-fire detections (VIIRS satellite)"><span class="swatch"></span>Active Fires<span
+              id="fire-count"></span></span>
+          <span class="layer-toggle l" id="toggle-labels"><span class="swatch"></span>Country Labels</span>
+          <span class="layer-toggle s" id="toggle-sat"><span class="swatch"></span>Satellite</span>
+          <span class="layer-toggle st off" id="toggle-streets"
+            title="Street map — road names and building footprints instead of satellite photography"><span
+              class="swatch"></span>Streets</span>
+          <span class="layer-toggle o off" id="toggle-orbits" title="Live satellites in orbit (Starlink, ISS…)"><span
+              class="swatch"></span>Satellites<span id="orbit-count"></span></span>
+          <span class="layer-toggle fp off" id="toggle-flights"
+            title="Live aircraft from ADS-B — zoom in for callsigns, type and altitude"><span
+              class="swatch"></span>Flights<span id="flight-count"></span></span>
+          <span class="layer-toggle cm off" id="toggle-cams"
+            title="Public traffic cameras — click one for the authority's live view"><span
+              class="swatch"></span>Cameras<span id="cam-count"></span></span>
+          <span class="grow"></span>
+          <span class="map-hint" id="map-hint">Drag to spin · Ctrl+scroll to zoom · click a country</span>
+          <span class="layer-toggle" id="toggle-fs" style="cursor:pointer" title="Full screen map"><svg class="i"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+            </svg> Full screen</span>
+          <span class="layer-toggle" id="reset-view" style="cursor:pointer"><svg class="i" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 2.6-6.4M3 3v5h5" />
+            </svg> Reset</span>
+          <span class="zoom-btns">
+            <button id="zoom-out" title="Zoom out">−</button>
+            <button id="zoom-in" title="Zoom in">+</button>
+          </span>
+        </div>
+      </section>
+
+      <section class="panel countries-panel" id="sec-countries">
+        <div class="panel-head">
+          <span class="hd-ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" />
+            </svg></span>
+          <h2>Countries</h2>
+          <span class="count" id="country-count">—</span>
+        </div>
+        <div class="country-filter">
+          <input id="country-filter" placeholder="Filter countries…" autocomplete="off" />
+        </div>
+        <div class="country-scroll">
+          <div class="country-list" id="country-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="mid-grid">
+      <!-- LIVE TV -->
+      <section class="panel tv-panel" id="sec-tv">
+        <div class="panel-head">
+          <span class="hd-ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="12" rx="2" />
+              <path d="M8 21h8M12 17v4" />
+            </svg></span>
+          <h2>Live TV · Global News</h2>
+          <span class="count" id="tv-status">—</span>
+          <a class="tv-open" id="tv-open" href="#" target="_blank" rel="noopener"
+            title="Open this channel on YouTube"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17L17 7M8 7h9v9" />
+            </svg> YouTube</a>
+        </div>
+        <div class="tv-player">
+          <div class="tv-frame-wrap" id="tv-frame-wrap">
+            <div class="tv-loading">
+              <div class="spinner"></div>Tuning in…
+            </div>
+          </div>
+        </div>
+        <div class="tv-grid-head">All live feeds · tap a box to watch it on the big screen</div>
+        <div class="tv-grid" id="tv-grid"></div>
+      </section>
+
+      <!-- SIDE: stats + disasters -->
+      <div class="side-col">
+        <div class="stats" id="stats">
+          <div class="stat danger">
+            <div class="n" id="s-quakes">—</div>
+            <div class="l">Quakes / 24h</div>
+          </div>
+          <div class="stat warn">
+            <div class="n" id="s-maxmag">—</div>
+            <div class="l">Max Magnitude</div>
+          </div>
+          <div class="stat info">
+            <div class="n" id="s-events">—</div>
+            <div class="l">Active Events</div>
+          </div>
+          <div class="stat ok">
+            <div class="n" id="s-alerts">—</div>
+            <div class="l">Disaster Alerts</div>
+          </div>
+        </div>
+
+        <section class="panel pulse" id="pulse" hidden>
+          <div class="panel-head">
+            <span class="hd-ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12h4l2 6 4-14 2 8h6" />
+              </svg></span>
+            <h2>24h Pulse</h2>
+            <span class="count" id="pulse-total">—</span>
+          </div>
+          <div class="pulse-body">
+            <svg class="pulse-spark" id="pulse-spark" viewBox="0 0 260 46" preserveAspectRatio="none"
+              aria-hidden="true"></svg>
+            <div class="pulse-legend" id="pulse-legend"></div>
+          </div>
+        </section>
+
+        <section class="panel disasters" id="sec-alerts">
+          <div class="panel-head">
+            <span class="hd-ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3 2 20h20z" />
+                <path d="M12 10v4M12 17h.01" />
+              </svg></span>
+            <h2>Disaster & Hazard Feed</h2>
+            <span class="count" id="disaster-count">—</span>
+          </div>
+          <div class="disaster-scroll">
+            <div class="disaster-list" id="disaster-list">
+              <div class="loading-block">
+                <div class="spinner"></div>Scanning global hazard networks…
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- NEWS -->
+    <section class="panel news-panel" id="sec-news">
+      <div class="panel-head">
+        <span class="hd-ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 5h13v15H6a2 2 0 0 1-2-2z" />
+            <path d="M17 8h3v10a2 2 0 0 1-2 2M7 9h7M7 13h7M7 17h5" />
+          </svg></span>
+        <h2>Global News Wire</h2>
+        <span class="count" id="news-scope">World · Top Stories</span>
+      </div>
+
+      <div class="news-controls">
+        <div class="field">
+          <span class="ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg></span>
+          <select class="select" id="country-select" title="Choose a country"></select>
+        </div>
+        <form class="search-form" id="search-form">
+          <div class="field">
+            <span class="ico"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M21 21l-4.3-4.3" />
+              </svg></span>
+            <input class="search-input" id="search-input" placeholder="Search world news…" autocomplete="off" />
+          </div>
+          <button class="btn" type="submit">Go</button>
+        </form>
+        <button class="cat-tab tr-toggle" id="toggle-translate" type="button" title="Translate headlines to English">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 5h10M8 3v2M5 5c0 5 4 9 8 11M11 5c-1 5-4.5 9-8 11" />
+            <path d="M13 21l4.5-10L22 21M14.8 17h5.4" />
+          </svg>
+          Translate
+        </button>
+        <div class="cat-tabs" id="cat-tabs"></div>
+      </div>
+
+      <div class="trends-row" id="trends-row" hidden>
+        <span class="lbl"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 17l6-6 4 4 8-8" />
+            <path d="M15 7h6v6" />
+          </svg> Trending Now</span>
+        <span id="trend-chips"></span>
+      </div>
+
+      <div class="news-grid" id="news-grid"></div>
+    </section>
+
+    <div class="footer">
+      WORLDNEWS aggregates public feeds in near real-time —
+      <a href="https://news.google.com" target="_blank" rel="noopener">Google News</a> ·
+      <a href="https://earthquake.usgs.gov" target="_blank" rel="noopener">USGS</a> ·
+      <a href="https://eonet.gsfc.nasa.gov" target="_blank" rel="noopener">NASA EONET</a> ·
+      <a href="https://www.gdacs.org" target="_blank" rel="noopener">GDACS</a><br />
+      Headlines link to original sources. For situational awareness only — not an official emergency service.<br />
+      <a href="/privacy">Privacy Policy</a> ·
+      <a href="/terms">Terms of Service</a> ·
+      <a href="/contact">Contact</a>
+    </div>
+
+    <section class="info-section" aria-label="About GlobalRisk">
+      <h2>About GlobalRisk</h2>
+      <blockquote>
+        GlobalRisk is a real-time global risk monitoring platform that aggregates and visualizes publicly available information about conflicts, natural disasters, severe weather, aviation activity and other significant events.
+      </blockquote>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <h3>Data Sources</h3>
+          <p>GlobalRisk draws on public news feeds, official emergency-management and geological sources, satellite and fire detection systems, aviation tracking data, and other reputable public data providers. Examples include Google News, USGS earthquake feeds, NASA EONET, GDACS, NOAA, and public aviation trackers where available.</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Methodology</h3>
+          <p>Events are collected from multiple sources, normalized into a common schema, categorized by type and severity, filtered for relevance, and displayed on the map and feed in near real time. Source quality, reporting lag, and regional coverage can vary by feed and by event.</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Important disclaimer</h3>
+          <p>This dashboard is for informational and situational-awareness purposes only. Data may be delayed, incomplete, or occasionally inaccurate. It is not an official emergency warning system and should not replace local authorities, official alerts, or professional guidance.</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Contact</h3>
+          <p>For questions, corrections, media inquiries, or partnership opportunities, contact <a href="mailto:hello@globalrisk.site">hello@globalrisk.site</a>.</p>
+        </article>
+
+        <article class="info-card wide">
+          <h3>Privacy Policy</h3>
+          <p>We may use limited analytics, advertising technology, and standard browser cookies to measure site traffic, improve performance, and support the service. We do not sell personal data. We use these tools only to understand usage patterns and to serve relevant advertisements in accordance with applicable privacy laws and platform policies.</p>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <!-- Toasts are the app's only transient feedback channel, so they must be spoken.
+     Polite, not assertive: a feed hiccup shouldn't interrupt what's being read. -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Mobile HUD command bar: jump between the monitor's sections -->
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Sections">
+    <a class="mn-item active" href="#sec-map" data-sec="sec-map">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" />
+        <circle cx="12" cy="12" r="2" />
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+      </svg>
+      <span>Map</span>
+    </a>
+    <a class="mn-item" href="#sec-countries" data-sec="sec-countries">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" />
+      </svg>
+      <span>Nations</span>
+    </a>
+    <a class="mn-item" href="#sec-tv" data-sec="sec-tv">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="12" rx="2" />
+        <path d="M8 21h8M12 17v4" />
+      </svg>
+      <span>Live TV</span>
+    </a>
+    <a class="mn-item" href="#sec-alerts" data-sec="sec-alerts">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3 2 20h20z" />
+        <path d="M12 10v4M12 17h.01" />
+      </svg>
+      <span>Alerts</span>
+    </a>
+    <a class="mn-item" href="#sec-news" data-sec="sec-news">
+      <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 5h13v15H6a2 2 0 0 1-2-2z" />
+        <path d="M17 8h3v10a2 2 0 0 1-2 2M7 9h7M7 13h7M7 17h5" />
+      </svg>
+      <span>News</span>
+    </a>
+  </nav>
+
+  <script src="world-data.js"></script>
+  <script src="satellite.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    /* Mobile HUD command bar — highlight the section currently in view.
+       Self-contained; no dependency on app.js internals. */
+    (function () {
+      var nav = document.getElementById('mobile-nav');
+      if (!nav) return;
+      var items = Array.prototype.slice.call(nav.querySelectorAll('.mn-item'));
+      var secs = items.map(function (a) {return document.getElementById(a.dataset.sec);});
+      function setActive(id) {
+        items.forEach(function (a) {a.classList.toggle('active', a.dataset.sec === id);});
+      }
+      if ('IntersectionObserver' in window) {
+        var visible = {};
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0;});
+          // Pick the section with the greatest visible share below the sticky header.
+          var best = null, bestR = 0;
+          secs.forEach(function (s) {
+            if (!s) return;
+            var r = visible[s.id] || 0;
+            if (r > bestR) {bestR = r; best = s.id;}
+          });
+          if (best) setActive(best);
+        }, {rootMargin: '-104px 0px -55% 0px', threshold: [0, 0.15, 0.4, 0.75, 1]});
+        secs.forEach(function (s) {if (s) io.observe(s);});
+      }
+      // Tapping an item is a normal anchor jump; scroll-margin handles the offset.
+    })();
+
+   
+    </script>
+    <script>
+      window.va = window.va || function () {
+        (window.vaq = window.vaq || []).push(arguments);
+      };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+
+</html>

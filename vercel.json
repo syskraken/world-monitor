@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "privacy.html", "use": "@vercel/static" },
+    { "src": "terms.html", "use": "@vercel/static" },
+    { "src": "contact.html", "use": "@vercel/static" },
+    { "src": "robots.txt", "use": "@vercel/static" },
+    { "src": "sitemap.xml", "use": "@vercel/static" },
+    { "src": "og-image.svg", "use": "@vercel/static" },
+    { "src": "ads.txt", "use": "@vercel/static" },
+    { "src": "styles.css", "use": "@vercel/static" },
+    { "src": "app.js", "use": "@vercel/static" },
+    { "src": "sw.js", "use": "@vercel/static" },
+    { "src": "world-data.js", "use": "@vercel/static" },
+    { "src": "satellite.min.js", "use": "@vercel/static" },
+    { "src": "hls.light.min.js", "use": "@vercel/static" },
+    { "src": "api/*.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/fetch", "dest": "/api/fetch.js" },
+    { "src": "/contact", "dest": "contact.html" },
+    { "src": "/privacy", "dest": "privacy.html" },
+    { "src": "/terms", "dest": "terms.html" },
+    { "src": "/api/live", "dest": "/api/live.js" },
+    { "src": "/api/ingest", "dest": "/api/ingest.js" },
+    { "src": "/api/events", "dest": "/api/events.js" },
+    { "src": "/api/subscribe", "dest": "/api/subscribe.js" },
+    { "src": "/api/firms", "dest": "/api/firms.js" },
+    { "src": "/api/flights", "dest": "/api/flights.js" },
+    { "src": "/api/webcams", "dest": "/api/webcams.js" },
+    { "src": "/robots.txt", "dest": "/robots.txt" },
+    { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
+    { "src": "/og-image.svg", "dest": "/og-image.svg" },
+    { "src": "/sw.js", "dest": "/sw.js", "headers": { "Cache-Control": "no-cache", "Service-Worker-Allowed": "/" } },
+    { "handle": "filesystem" },
+    { "src": "/", "dest": "/index.html" }
+  ]
+}

@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">GlobalRisk — Global Risk Monitoring</title>
+  <desc id="desc">GlobalRisk global situational-awareness dashboard with a world map and live event markers.</desc>
+
+  <defs>
+    <radialGradient id="bg" cx="62%" cy="48%" r="80%">
+      <stop offset="0%" stop-color="#182729"/>
+      <stop offset="58%" stop-color="#101617"/>
+      <stop offset="100%" stop-color="#090b0c"/>
+    </radialGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38bdad"/>
+      <stop offset="100%" stop-color="#00b4a0"/>
+    </linearGradient>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".04"/>
+    </pattern>
+    <clipPath id="globeClip">
+      <circle cx="870" cy="315" r="238"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Outer frame -->
+  <rect x="34" y="34" width="1132" height="562" rx="18"
+        fill="none" stroke="#fff" stroke-opacity=".10"/>
+  <path d="M34 108H1166" stroke="#38bdad" stroke-opacity=".28"/>
+  <path d="M34 532H1166" stroke="#fff" stroke-opacity=".06"/>
+
+  <!-- Left panel -->
+  <g font-family="Inter, Arial, Helvetica, sans-serif">
+    <text x="82" y="157" fill="#38bdad" font-size="16" font-weight="700" letter-spacing="3.2">
+      GLOBAL SITUATIONAL AWARENESS
+    </text>
+
+    <text x="82" y="244" fill="#f3f6f5" font-size="66" font-weight="800" letter-spacing="-2.2">
+      GlobalRisk
+    </text>
+
+    <text x="84" y="284" fill="#aebbbb" font-size="21">
+      Real-time global risk monitoring
+    </text>
+
+    <rect x="84" y="316" width="205" height="2" fill="url(#teal)"/>
+
+    <text x="84" y="357" fill="#d2dada" font-size="17">
+      News · Disasters · Weather
+    </text>
+    <text x="84" y="388" fill="#d2dada" font-size="17">
+      Earthquakes · Fires · Aviation
+    </text>
+
+    <g transform="translate(84 438)">
+      <circle cx="7" cy="7" r="5" fill="#38bdad"/>
+      <text x="23" y="12" fill="#788888" font-size="12.5" font-weight="600" letter-spacing="1.7">
+        LIVE EVENT MONITOR
+      </text>
+    </g>
+  </g>
+
+  <!-- Globe -->
+  <g>
+    <circle cx="870" cy="315" r="238" fill="#0b1416"
+            stroke="#38bdad" stroke-opacity=".32" stroke-width="2"/>
+
+    <g clip-path="url(#globeClip)">
+      <!-- Longitude -->
+      <g fill="none" stroke="#38bdad" stroke-opacity=".13" stroke-width="1">
+        <ellipse cx="870" cy="315" rx="188" ry="238"/>
+        <ellipse cx="870" cy="315" rx="105" ry="238"/>
+        <ellipse cx="870" cy="315" rx="32" ry="238"/>
+        <!-- Latitude -->
+        <ellipse cx="870" cy="315" rx="238" ry="160"/>
+        <ellipse cx="870" cy="315" rx="238" ry="82"/>
+      </g>
+
+      <!-- Stylized continents -->
+      <g fill="#38bdad" fill-opacity=".17" stroke="#38bdad" stroke-opacity=".18">
+        <path d="M650 232l43-31 61 7 35 32-15 39-43 5-20 34-45-16-23-34z"/>
+        <path d="M756 315l46 7 25 38-15 51-30 40-25-43-22-48z"/>
+        <path d="M829 184l55-28 74 19 25 40-31 31-61-5-38 27-38-26z"/>
+        <path d="M903 274l68-17 61 27 23 47-42 19-27 42-57-9-25-45z"/>
+        <path d="M1054 381l53 11 35 31-17 35-52-2-32-29z"/>
+        <path d="M1130 218l37 15 18 36-28 21-30-28z"/>
+      </g>
+
+      <!-- Event network -->
+      <g stroke="#38bdad" stroke-opacity=".32" stroke-width="1.4" stroke-dasharray="4 7" fill="none">
+        <path d="M788 292L884 225L980 319L1050 388"/>
+        <path d="M884 225L1018 174"/>
+        <path d="M980 319L1090 258"/>
+      </g>
+
+      <!-- Event markers -->
+      <g filter="url(#softGlow)">
+        <circle cx="788" cy="292" r="6.5" fill="#38bdad"/>
+        <circle cx="884" cy="225" r="8" fill="#00b4a0"/>
+        <circle cx="980" cy="319" r="6" fill="#38bdad"/>
+        <circle cx="1050" cy="388" r="7.5" fill="#00b4a0"/>
+        <circle cx="1018" cy="174" r="5" fill="#38bdad"/>
+        <circle cx="1090" cy="258" r="5.5" fill="#38bdad"/>
+      </g>
+
+      <!-- Radar sweep -->
+      <path d="M870 315L1092 213A245 245 0 0 0 1050 181Z"
+            fill="#38bdad" fill-opacity=".045"/>
+    </g>
+
+    <!-- Globe center ring -->
+    <circle cx="870" cy="315" r="238" fill="none"
+            stroke="#38bdad" stroke-opacity=".16" stroke-width="1"/>
+  </g>
+
+  <!-- Globe labels -->
+  <g font-family="Inter, Arial, Helvetica, sans-serif" font-size="10.5" font-weight="600" letter-spacing="1.2">
+    <text x="795" y="276" fill="#73d8cd">EVENT</text>
+    <text x="894" y="208" fill="#73d8cd">ALERT</text>
+    <text x="1059" y="408" fill="#73d8cd">LIVE</text>
+  </g>
+
+  <!-- Footer -->
+  <g font-family="Inter, Arial, Helvetica, sans-serif">
+    <text x="82" y="565" fill="#687878" font-size="12" font-weight="600" letter-spacing="1.8">
+      GLOBALRISK.SITE
+    </text>
+    <text x="1118" y="565" text-anchor="end" fill="#687878" font-size="12">
+      Public-source monitoring
+    </text>
+  </g>
+</svg>

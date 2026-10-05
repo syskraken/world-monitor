@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethos Footer with AI Block</title>
+  <style>
+    /* Base Footer Styling */
+    .ethos-footer {
+      background-color: #0B1228;
+      padding: 60px 40px 40px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end; /* Aligns the bottom elements (socials, nav, button) */
+      color: #ffffff;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    /* --- Left Column: Brand & Socials --- */
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .brand-logo {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .social-icons svg {
+      width: 20px;
+      height: 20px;
+      fill: #ffffff;
+      cursor: pointer;
+    }
+
+    /* --- Center Column: AI Block & Nav --- */
+    .footer-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    /* AI Block Specifics */
+    .ai-feature-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centered for the middle column */
+      text-align: center;
+      gap: 16px;
+    }
+
+    .ai-text-content p {
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .ai-heading {
+      color: #ffffff; 
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .ai-subheading {
+      color: #94a3b8; 
+      font-size: 14px;
+    }
+
+    .ai-icon-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .ai-card {
+      width: 42px;
+      height: 42px;
+      background-color: #F8F9FA; 
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .ai-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .ai-card svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Navigation Links */
+    .footer-nav {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    
+    .footer-nav a:hover {
+      color: #94a3b8;
+    }
+
+    /* --- Right Column: Contact & CTA --- */
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 30px;
+    }
+
+    .contact-email {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .demo-btn {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .demo-btn:hover {
+      opacity: 0.9;
+    }
+
+    .demo-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Basic Responsive Behavior */
+    @media (max-width: 900px) {
+      .ethos-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 50px;
+      }
+      .footer-left, .footer-right {
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body style="margin: 0; background: #e5e7eb;">
+
+  <!-- ETHOS FOOTER START -->
+  <footer class="ethos-footer">
+    
+    <!-- LEFT: Logo & Socials -->
+    <div class="footer-left">
+      <h2 class="brand-logo">ethos</h2>
+      <div class="social-icons">
+        <!-- Placeholder SVGs for LinkedIn, Substack, Shopify -->
+        <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20.354 7.228h-3.415a4.938 4.938 0 0 0-9.878 0H3.646L1.87 23.018h20.26l-1.776-15.79zm-8.354-2.82c1.477 0 2.695 1.134 2.82 2.82H9.18c.125-1.686 1.343-2.82 2.82-2.82zM4.697 21.042l1.246-11.838h1.05v1.942a1 1 0 1 0 2 0V9.204h6.014v1.942a1 1 0 1 0 2 0V9.204h1.05l1.246 11.838H4.697z"/></svg>
+      </div>
+    </div>
+
+    <!-- CENTER: AI Block & Navigation -->
+    <div class="footer-center">
+      
+      <!-- AI BLOCK ADDED HERE -->
+      <div class="ai-feature-block">
+        <div class="ai-text-content">
+          <p class="ai-heading">The reference in preventive health.</p>
+          <p class="ai-subheading">Understand what sets Ethos apart.</p>
+        </div>
+
+        <div class="ai-icon-row">
+          <div class="ai-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#202123" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.8.9 6.5 2.5l-2.5 2.5a5.5 5.5 0 1 0 1.5 4H21z"></path><path d="M12 9v6"></path><path d="M9 12h6"></path>
+            </svg>
+          </div>
+          <div class="ai-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#D97757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20"></path><path d="M2 12h20"></path><path d="m4.9 4.9 14.2 14.2"></path><path d="m4.9 19.1 14.2-14.2"></path>
+            </svg>
+          </div>
+          <div class="ai-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#202123" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line>
+            </svg>
+          </div>
+          <div class="ai-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="footer-nav">
+        <a href="#">About</a>
+        <a href="#">Features</a>
+        <a href="#">Pricing</a>
+        <a href="#">Blog</a>
+        <a href="#">Announcements</a>
+        <a href="#">Account</a>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+      </nav>
+    </div>
+
+    <!-- RIGHT: Contact & Demo Button -->
+    <div class="footer-right">
+      <p class="contact-email">hey@heyethos.com</p>
+      <button class="demo-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+        Book A Demo
+      </button>
+    </div>
+
+  </footer>
+  <!-- ETHOS FOOTER END -->
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "world-monitor",
+  "version": "1.0.0",
+  "description": "WORLDWATCH — real-time global news, natural disasters, conflict & crisis monitor",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}

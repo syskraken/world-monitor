@@ -1,0 +1,7 @@
+server.js
+.claude/
+scratchpad/
+*.log
+.env
+.env.local
+.env.*.local
