@@ -8,7 +8,6 @@
     { "src": "about.html", "use": "@vercel/static" },
     { "src": "methodology.html", "use": "@vercel/static" },
     { "src": "robots.txt", "use": "@vercel/static" },
-    { "src": "sitemap.xml", "use": "@vercel/static" },
     { "src": "og-image.svg", "use": "@vercel/static" },
     { "src": "ads.txt", "use": "@vercel/static" },
     { "src": "styles.css", "use": "@vercel/static" },
@@ -17,9 +16,16 @@
     { "src": "world-data.js", "use": "@vercel/static" },
     { "src": "satellite.min.js", "use": "@vercel/static" },
     { "src": "hls.light.min.js", "use": "@vercel/static" },
-    { "src": "api/*.js", "use": "@vercel/node" }
+    { "src": "api/*.js", "use": "@vercel/node", "config": { "includeFiles": ["world-data.js", "lib/**"] } }
   ],
   "routes": [
+    { "src": "/sitemap.xml", "dest": "/api/pages.js?t=sitemap" },
+    { "src": "/countries", "dest": "/api/pages.js?t=countries" },
+    { "src": "/country/([^/]+)", "dest": "/api/pages.js?t=country&slug=$1" },
+    { "src": "/events", "dest": "/api/pages.js?t=events" },
+    { "src": "/event/([^/]+)(?:/[^/]*)?", "dest": "/api/pages.js?t=event&id=$1" },
+    { "src": "/guides", "dest": "/api/pages.js?t=guides" },
+    { "src": "/guides/([^/]+)", "dest": "/api/pages.js?t=guide&slug=$1" },
     { "src": "/api/fetch", "dest": "/api/fetch.js" },
     { "src": "/contact", "dest": "contact.html" },
     { "src": "/about", "dest": "about.html" },
@@ -34,7 +40,6 @@
     { "src": "/api/flights", "dest": "/api/flights.js" },
     { "src": "/api/webcams", "dest": "/api/webcams.js" },
     { "src": "/robots.txt", "dest": "/robots.txt" },
-    { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
     { "src": "/og-image.svg", "dest": "/og-image.svg" },
     { "src": "/sw.js", "dest": "/sw.js", "headers": { "Cache-Control": "no-cache", "Service-Worker-Allowed": "/" } },
     { "handle": "filesystem" },

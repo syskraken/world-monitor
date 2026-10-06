@@ -60,6 +60,7 @@ const ALLOWED_HOSTS = new Set([
   'earthquake.usgs.gov',
   'eonet.gsfc.nasa.gov',
   'www.gdacs.org',
+  'www.nhc.noaa.gov',       // NOAA National Hurricane Center active storms
   'eoimages.gsfc.nasa.gov', // Blue Marble texture (proxied so canvas isn't tainted)
   'celestrak.org',          // satellite TLE orbital elements
   'translate.googleapis.com', // headline translation
@@ -213,6 +214,17 @@ http
     if (u.pathname === '/api/subscribe') return mountVercel('./api/subscribe', req, res, u);
     if (u.pathname === '/api/firms') return mountVercel('./api/firms', req, res, u);
     if (u.pathname === '/api/flights') return mountVercel('./api/flights', req, res, u);
+    if (u.pathname === '/sitemap.xml') return mountVercel('./api/pages', req, res, new URL('/?t=sitemap', 'http://localhost'));
+    {
+      const p = u.pathname; let m;
+      const to = (qs) => mountVercel('./api/pages', req, res, new URL('/?' + qs, 'http://localhost'));
+      if (p === '/countries') return to('t=countries');
+      if (p === '/events') return to('t=events');
+      if (p === '/guides') return to('t=guides');
+      if ((m = /^\/country\/([^/]+)$/.exec(p))) return to('t=country&slug=' + m[1]);
+      if ((m = /^\/event\/([^/]+)(?:\/[^/]*)?$/.exec(p))) return to('t=event&id=' + m[1]);
+      if ((m = /^\/guides\/([^/]+)$/.exec(p))) return to('t=guide&slug=' + m[1]);
+    }
     if (u.pathname === '/api/webcams') return mountVercel('./api/webcams', req, res, u);
     handleStatic(res, u.pathname);
   })

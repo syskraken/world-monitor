@@ -18,7 +18,8 @@ const push = require('../lib/push');
 // first run (which backfills ~24h of history) and prevents re-alerting on
 // anything that predates the subscriber.
 const ALERT_WINDOW_MS = 90 * 60 * 1000;
-const RETAIN_MS = 7 * 24 * 60 * 60 * 1000;
+// 60 days: event pages and 30-day country pages are built from this history.
+const RETAIN_MS = 60 * 24 * 60 * 60 * 1000;
 
 module.exports = async (req, res) => {
   const secret = process.env.INGEST_SECRET;
