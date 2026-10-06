@@ -1666,3 +1666,27 @@ body {
 }
 
 #map.deep #storms { display: none; }
+
+/* Content pages (about / methodology / legal) */
+.legal-nav { display: flex; gap: 16px; flex-wrap: wrap; }
+.legal-nav a {
+  color: var(--cyan); text-decoration: none; font-family: var(--mono); font-size: 12px; letter-spacing: 0.8px;
+}
+.legal-nav a:hover { text-decoration: underline; }
+.legal-card ul { margin: 0 0 14px; padding-left: 22px; line-height: 1.7; font-size: 15px; }
+.legal-card li { margin-bottom: 8px; }
+.legal-card strong { color: var(--ink); }
+.table-wrap { overflow-x: auto; margin: 0 0 14px; }
+.src-table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
+.src-table th, .src-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.src-table th { font-family: var(--mono); font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-faint); }
+.legal-footer {
+  max-width: 980px; margin: 0 auto; padding: 0 20px 40px; text-align: center;
+  font-size: 13px; line-height: 2; color: var(--ink-faint);
+}
+.legal-footer a { color: var(--cyan); text-decoration: none; }
+.legal-footer a:hover { text-decoration: underline; }
+@media (max-width: 600px) {
+  .legal-header { flex-direction: column; align-items: flex-start; }
+  .legal-card { padding: 22px 18px; }
+}

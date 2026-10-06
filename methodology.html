@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Methodology | GlobalRisk</title>
+  <meta name="description" content="How GlobalRisk collects, normalizes, categorizes and displays public data from government agencies, scientific monitors and news sources." />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%2338e1ff' stroke-width='6'/><circle cx='50' cy='50' r='10' fill='%23ff4d5e'/></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="canonical" href="https://globalrisk.site/methodology" />
+  <meta property="og:title" content="Methodology | GlobalRisk" />
+  <meta property="og:description" content="How GlobalRisk collects, normalizes, categorizes and displays public data from government agencies, scientific monitors and news sources." />
+  <meta property="og:url" content="https://globalrisk.site/methodology" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1863473523633296"
+    crossorigin="anonymous"></script>
+</head>
+<body class="legal-page">
+  <header class="legal-header">
+    <div class="brand legal-brand">
+      <div class="globe" aria-hidden="true"></div>
+      <div>
+        <h1>GLOBALRISK</h1>
+        <div class="sub">Global Situation Monitor</div>
+      </div>
+    </div>
+    <nav class="legal-nav" aria-label="Site">
+      <a href="/">Live dashboard</a>
+      <a href="/about">About</a>
+      <a href="/methodology">Methodology</a>
+    </nav>
+  </header>
+  <main class="legal-shell">
+    <article class="legal-card">
+      <p class="eyebrow">Methodology</p>
+      <h2>How GlobalRisk Works</h2>
+
+      <p>GlobalRisk aggregates publicly available information from government agencies, public data providers, news sources and other public resources. Data is collected, normalized and presented through a unified interface to help users understand events and activity around the world.</p>
+      <p>GlobalRisk does not claim ownership of third-party data. Each data source remains the property of its respective provider.</p>
+
+      <h3>1. Collection</h3>
+      <p>Our servers and your browser request each provider's public feed or API on a regular schedule. Frequency depends on the provider: earthquake and alert feeds are checked every few minutes, while slower-changing sources are checked less often. If a source is unavailable, the rest of the dashboard keeps working and that layer simply shows older data until the source recovers.</p>
+
+      <h3>2. Normalization</h3>
+      <p>Each source uses its own format (GeoJSON, RSS, JSON APIs) and its own scales. We convert every item into a common structure: an identifier, source, category, title, place, country, coordinates, time and a link to the original. Timestamps are converted to a single standard, and duplicate items from repeated polling are discarded.</p>
+
+      <h3>3. Categorization and severity</h3>
+      <p>Events are assigned a category (for example earthquake, storm, wildfire, flood, conflict-related news) and a severity level of low, moderate, high or extreme. Where a source supplies its own measure we map it to our scale, such as earthquake magnitude (below 4 is low, 4 to 4.9 moderate, 5 to 5.9 high, 6 and above extreme) or the alert level that GDACS publishes. News headlines are grouped by keyword and topic matching. This is automated and approximate, and may occasionally misclassify an item.</p>
+
+      <h3>4. Geographic grouping</h3>
+      <p>Items with coordinates are placed directly on the map. Others are matched to a country from the place name or source metadata. This lets you view activity by region and country, and see clusters of related events rather than a flat list.</p>
+
+      <h3>5. Presentation and filtering</h3>
+      <p>Events are drawn on an interactive map and listed in feeds that can be filtered by type, severity and region. Markers are color-coded by severity. Every item shows its source name and links to the original, so you can verify and read more from the publisher.</p>
+
+      <h3>6. Attribution and rights</h3>
+      <p>We show headlines and short metadata only, and link to the original publisher for the full content. Article text is not reproduced. If you are a rights holder and would like attribution changed or an item removed, contact <a href="mailto:hello@globalrisk.site">hello@globalrisk.site</a>.</p>
+
+      <h3>Data sources</h3>
+      <div class="table-wrap">
+      <table class="src-table">
+        <thead><tr><th>Category</th><th>Provider</th><th>What we use</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>News headlines</td><td>Google News RSS (aggregating many publishers)</td><td>Headline, publisher, publish time, link</td><td>Headlines only, linked to the original publisher</td></tr>
+          <tr><td>Earthquakes</td><td>USGS Earthquake Hazards Program</td><td>Magnitude, location, depth, time</td><td>Magnitude 2.5 and above, last 24 hours of history</td></tr>
+          <tr><td>Natural events</td><td>NASA EONET (Earth Observatory Natural Event Tracker)</td><td>Event type, location, status, source links</td><td>Open events: storms, volcanoes, wildfires, floods and similar</td></tr>
+          <tr><td>Disaster alerts</td><td>GDACS (Global Disaster Alert and Coordination System)</td><td>Alert level, event type, country, link</td><td>Severity mapped to GlobalRisk levels</td></tr>
+          <tr><td>Fires</td><td>NASA FIRMS (Fire Information for Resource Management System)</td><td>Satellite-detected hotspots</td><td>Near-real-time thermal detections</td></tr>
+          <tr><td>Aviation</td><td>OpenSky Network, ADSB.fi, ADSB.lol, ADSBdb</td><td>Aircraft position, altitude, callsign</td><td>Community-sourced ADS-B data; coverage varies by region</td></tr>
+          <tr><td>Satellites</td><td>CelesTrak</td><td>Orbital elements for satellite tracks</td><td>Positions computed in the browser</td></tr>
+          <tr><td>Public notices</td><td>FBI and INTERPOL public notice APIs</td><td>Publicly released notices</td><td>Shown as published; not a determination of guilt</td></tr>
+          <tr><td>Live cameras</td><td>DriveBC, 511 Ontario, Caltrans, Fintraffic Digitraffic, data.gov.sg, data.gov.hk, YouTube embeds</td><td>Public camera images and streams</td><td>Linked or embedded from the operator</td></tr>
+          <tr><td>Base maps and imagery</td><td>Esri World Imagery, NASA GIBS, Windy</td><td>Map tiles and weather layers</td><td>Displayed under each provider's terms</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h3>Known limitations</h3>
+      <ul>
+        <li>Data may be delayed, incomplete or later corrected by the source.</li>
+        <li>Aviation data comes from community receivers and does not include every aircraft, including some military or restricted flights.</li>
+        <li>News coverage reflects what publishers report and may be uneven across regions and languages.</li>
+        <li>Automated categorization and severity are estimates, not official assessments.</li>
+        <li>GlobalRisk is not an emergency alert system. Follow guidance from local authorities.</li>
+      </ul>
+
+      <p>Questions about methodology? <a href="/contact">Get in touch</a>.</p>
+
+    </article>
+  </main>
+  <footer class="legal-footer">
+    <a href="/">Live dashboard</a> · <a href="/about">About</a> · <a href="/methodology">Methodology</a> ·
+    <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms of Service</a> · <a href="/contact">Contact</a>
+    <div>© 2026 GlobalRisk. Not an official emergency service.</div>
+  </footer>
+</body>
+</html>

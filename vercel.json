@@ -5,6 +5,8 @@
     { "src": "privacy.html", "use": "@vercel/static" },
     { "src": "terms.html", "use": "@vercel/static" },
     { "src": "contact.html", "use": "@vercel/static" },
+    { "src": "about.html", "use": "@vercel/static" },
+    { "src": "methodology.html", "use": "@vercel/static" },
     { "src": "robots.txt", "use": "@vercel/static" },
     { "src": "sitemap.xml", "use": "@vercel/static" },
     { "src": "og-image.svg", "use": "@vercel/static" },
@@ -20,6 +22,8 @@
   "routes": [
     { "src": "/api/fetch", "dest": "/api/fetch.js" },
     { "src": "/contact", "dest": "contact.html" },
+    { "src": "/about", "dest": "about.html" },
+    { "src": "/methodology", "dest": "methodology.html" },
     { "src": "/privacy", "dest": "privacy.html" },
     { "src": "/terms", "dest": "terms.html" },
     { "src": "/api/live", "dest": "/api/live.js" },

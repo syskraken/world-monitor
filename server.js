@@ -182,6 +182,7 @@ async function handleLive(res, handle, scrapeOnly) {
 function handleStatic(res, urlPath) {
   let rel = decodeURIComponent(urlPath);
   if (rel === '/') rel = '/index.html';
+  else if (!path.extname(rel)) rel += '.html'; // clean URLs, mirrors vercel.json routes
   const file = path.normalize(path.join(PUBLIC_DIR, rel));
   if (!file.startsWith(PUBLIC_DIR)) {
     res.writeHead(403);
