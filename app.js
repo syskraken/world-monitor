@@ -2166,51 +2166,165 @@ async function fetchStormGeom(eventid, episodeid) {
   }
   return null;
 }
+/* ---- multi-source cyclone loading --------------------------------------
+   No single feed is trusted on its own (GDACS already broke once when it
+   started requiring an `eventtype` parameter, which silently emptied the
+   whole layer). Three independent sources are fetched in parallel and merged
+   by storm name:
+     GDACS   position, wind, affected countries, forecast track + cone
+     NHC     official NOAA position/intensity (Atlantic + E/C Pacific)
+     EONET   NASA position/intensity + observed past track (worldwide)
+   Any one of them is enough to put a storm on the map; more sources add
+   detail and a cross-check. */
+const KT_TO_KMH = 1.852;
+const stormKey = (n) => String(n || '').toLowerCase()
+  .replace(/\b(super|severe|major|post[- ]tropical|tropical|hurricane|typhoon|cyclone|storm|depression)\b/g, ' ')
+  .replace(/-\d{2}\b/, ' ').replace(/[^a-z]/g, '');
+const stormName = (n) => String(n || 'Storm')
+  .replace(/^(super |severe |major |post[- ]tropical )?(tropical )?(hurricane|typhoon|cyclone|storm|depression)\s+/i, '')
+  .replace(/[-\s]*\d{2}$/, '').trim().toUpperCase() || 'STORM';
+
+async function gdacsStormList() {
+  const day = (ms) => new Date(ms).toISOString().slice(0, 10);
+  const now = Date.now();
+  // SEARCH is ~100x lighter than MAP; MAP (with its now-mandatory eventtype) is the fallback.
+  const urls = [
+    'https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC&fromdate=' + day(now - 14 * 864e5) + '&todate=' + day(now + 864e5) + '&alertlevel=green;orange;red',
+    'https://www.gdacs.org/gdacsapi/api/events/geteventlist/MAP?eventtype=TC',
+  ];
+  let list = null;
+  for (const u of urls) {
+    try { const j = await fetchJson(u); if (j && Array.isArray(j.features)) { list = j; break; } } catch (e) { /* try next */ }
+  }
+  if (!list) throw new Error('GDACS unavailable');
+  const seen = new Map();
+  for (const f of list.features) {
+    const p = f.properties || {};
+    if (p.eventtype !== 'TC' || String(p.iscurrent) !== 'true') continue;
+    const geo = f.geometry;
+    const pt = geo && geo.type === 'Point' && Array.isArray(geo.coordinates) && typeof geo.coordinates[0] === 'number' ? geo.coordinates : null;
+    if (!seen.has(p.eventid)) seen.set(p.eventid, { p, pt });
+    else if (pt && !seen.get(p.eventid).pt) seen.get(p.eventid).pt = pt;
+  }
+  return [...seen.values()];
+}
+// GDACS also publishes an RSS feed that is served separately from its JSON API, so it
+// keeps working when the API breaks. Position + wind only (no cone/track).
+async function gdacsRssStormList() {
+  const xml = await fetchText('https://www.gdacs.org/xml/rss_tc_7d.xml');
+  const out = [];
+  for (const it of xml.split(/<item>/i).slice(1)) {
+    if (!/<gdacs:iscurrent>\s*true\s*<\/gdacs:iscurrent>/i.test(it)) continue;
+    const nm = /tropical cyclone\s+([A-Za-z0-9-]+?)(?:-\d{2})?[\s.,]/i.exec(it);
+    const lat = parseFloat((/<geo:lat>([^<]+)<\/geo:lat>/i.exec(it) || [])[1]);
+    const lon = parseFloat((/<geo:long>([^<]+)<\/geo:long>/i.exec(it) || [])[1]);
+    if (!nm || !isFinite(lat) || !isFinite(lon)) continue;
+    const w = /maximum wind speed of ([\d.]+) km\/h/i.exec(it);
+    const link = /<link>([^<]+)<\/link>/i.exec(it);
+    const mod = /<gdacs:datemodified>([^<]+)</i.exec(it);
+    out.push({ name: nm[1], wind: w ? parseFloat(w[1]) : 0, center: [lon, lat],
+      report: link ? link[1].replace(/&amp;/g, '&') : '', stamp: mod ? mod[1] : '' });
+  }
+  return out;
+}
+async function nhcStormList() {
+  const j = await fetchJson('https://www.nhc.noaa.gov/CurrentStorms.json');
+  return (j.activeStorms || []).filter((s) => isFinite(s.latitudeNumeric) && isFinite(s.longitudeNumeric)).map((s) => ({
+    name: s.name, wind: (parseFloat(s.intensity) || 0) * KT_TO_KMH,
+    center: [s.longitudeNumeric, s.latitudeNumeric], report: s.publicAdvisory && s.publicAdvisory.url, stamp: s.lastUpdate,
+  }));
+}
+async function eonetStormList() {
+  const j = await fetchJson('https://eonet.gsfc.nasa.gov/api/v3/events?status=open&category=severeStorms');
+  const out = [];
+  for (const ev of (j.events || [])) {
+    if (!/typhoon|hurricane|tropical|cyclone/i.test(ev.title || '')) continue;
+    const pts = (ev.geometry || []).filter((g) => g.type === 'Point' && Array.isArray(g.coordinates));
+    if (!pts.length) continue;
+    const last = pts[pts.length - 1];
+    if (Date.now() - Date.parse(last.date) > 36 * 3600e3) continue;   // open in EONET but no longer updating → dissipated
+    const past = [];
+    for (let i = 1; i < pts.length; i++) past.push([pts[i - 1].coordinates, pts[i].coordinates]);
+    out.push({ name: ev.title, wind: (last.magnitudeValue || 0) * (last.magnitudeUnit === 'kts' ? KT_TO_KMH : 1),
+      center: last.coordinates, past, report: ev.link, stamp: last.date });
+  }
+  return out;
+}
+
 async function loadStorms(force) {
   if (stormsLoading || (stormsLoaded && !force)) return;
   stormsLoading = true;
   if (!stormsLoaded) $('#storm-count').textContent = ' ·…';
   try {
-    const list = await fetchJson('https://www.gdacs.org/gdacsapi/api/events/geteventlist/MAP');
-    const seen = new Map();
-    for (const f of (list.features || [])) {
-      const p = f.properties;
-      if (p.eventtype !== 'TC' || String(p.iscurrent) !== 'true') continue;
-      const geo = f.geometry;
-      const pt = geo && geo.type === 'Point' && Array.isArray(geo.coordinates) && typeof geo.coordinates[0] === 'number' ? geo.coordinates : null;
-      if (!seen.has(p.eventid)) seen.set(p.eventid, { p, pt });
-      else if (pt && !seen.get(p.eventid).pt) seen.get(p.eventid).pt = pt;
-    }
-    const picked = [...seen.values()].sort((a, b) => (b.p.severitydata?.severity || 0) - (a.p.severitydata?.severity || 0)).slice(0, 12);
-    // Signature = which cyclones are active + their advisory episode. If GDACS
-    // hasn't published anything new, skip the heavy geometry fetch + redraw.
-    const sig = picked.map((rec) => rec.p.eventid + ':' + rec.p.episodeid).join('|');
+    const [rg, rn, re, rr] = await Promise.allSettled([gdacsStormList(), nhcStormList(), eonetStormList(), gdacsRssStormList()]);
+    const ok = [rg, rn, re, rr].filter((r) => r.status === 'fulfilled').length;
+    if (!ok) throw new Error('all storm sources failed');
+    const gr = rr.status === 'fulfilled' ? rr.value : [];
+    const gd = rg.status === 'fulfilled' ? rg.value.sort((a, b) => (b.p.severitydata?.severity || 0) - (a.p.severitydata?.severity || 0)).slice(0, 12) : [];
+    const nh = rn.status === 'fulfilled' ? rn.value : [];
+    const eo = re.status === 'fulfilled' ? re.value : [];
+
+    // Skip the heavy geometry fetch + redraw when none of the sources has an update.
+    const sig = [gd.map((r) => r.p.eventid + ':' + r.p.episodeid).join(','), nh.map((s) => s.name + s.stamp).join(','), eo.map((s) => s.name + s.stamp).join(','), gr.map((s) => s.name + s.stamp).join(',')].join('|');
     if (stormsLoaded && sig === stormsSig) { stormsLoading = false; return; }
     stormsSig = sig;
-    const geoms = await Promise.all(picked.map((rec) => fetchStormGeom(rec.p.eventid, rec.p.episodeid)));
-    storms = [];
-    picked.forEach((rec, i) => {
-      const p = rec.p;
+
+    const geoms = await Promise.all(gd.map((rec) => fetchStormGeom(rec.p.eventid, rec.p.episodeid)));
+    const merged = new Map();
+    const slot = (name) => {
+      const k = stormKey(name);
+      if (!merged.has(k)) merged.set(k, { name: stormName(name), srcs: [], wind: 0, windFrom: 9, affected: [], center: null, cones: [], past: [], fore: [], fpoints: [], report: '' });
+      return merged.get(k);
+    };
+    // wind precedence: NHC (official) > GDACS > EONET — lower rank wins
+    const setWind = (s, w, rank) => { if (w > 0 && rank < s.windFrom) { s.wind = w; s.windFrom = rank; } };
+    gd.forEach((rec, i) => {
+      const p = rec.p, s = slot(p.eventname || p.name);
       const parsed = geoms[i] ? parseStorm(geoms[i]) : null;
-      const center = (parsed && parsed.center) || rec.pt;   // fall back to the event-list position
-      if (!center) return;
-      const wind = p.severitydata?.severity || 0;
-      storms.push({
-        id: p.eventid, name: (p.eventname || p.name || 'Storm').replace(/[-\s]*26$/, ''),
-        wind, cat: stormCat(wind), report: p.url && p.url.report,
-        affected: (p.affectedcountries || []).map((c) => c.countryname).filter(Boolean),
-        center,
-        cones: (parsed && parsed.cones) || [],
-        past: (parsed && parsed.past) || [],
-        fore: (parsed && parsed.fore) || [],
-        fpoints: (parsed && parsed.fpoints) || [],
-      });
+      s.srcs.push('GDACS');
+      setWind(s, p.severitydata?.severity || 0, 2);
+      s.affected = (p.affectedcountries || []).map((c) => c.countryname).filter(Boolean);
+      s.report = (p.url && p.url.report) || s.report;
+      s.gcenter = (parsed && parsed.center) || rec.pt || null;
+      if (parsed) { s.cones = parsed.cones; s.past = parsed.past; s.fore = parsed.fore; s.fpoints = parsed.fpoints; }
     });
+    gr.forEach((g) => {
+      const s = slot(g.name);
+      if (!s.srcs.includes('GDACS')) s.srcs.push('GDACS');
+      setWind(s, g.wind, 2);
+      if (!s.gcenter) s.gcenter = g.center;
+      s.report = s.report || g.report;
+    });
+    nh.forEach((n) => {
+      const s = slot(n.name);
+      s.srcs.push('NHC'); setWind(s, n.wind, 1);
+      s.ncenter = n.center; s.report = n.report || s.report;
+    });
+    eo.forEach((e) => {
+      const s = slot(e.name);
+      s.srcs.push('EONET'); setWind(s, e.wind, 3);
+      s.ecenter = e.center;
+      if (!s.past.length) s.past = e.past;
+      s.report = s.report || e.report;
+    });
+    const next = [];
+    for (const s of merged.values()) {
+      const center = s.ncenter || s.gcenter || s.ecenter;      // NHC is freshest, then GDACS, then EONET
+      if (!center) continue;
+      next.push({ id: s.name, name: s.name, wind: s.wind, cat: stormCat(s.wind), report: s.report, affected: s.affected,
+        center, cones: s.cones, past: s.past, fore: s.fore, fpoints: s.fpoints, srcs: s.srcs });
+    }
+    next.sort((a, b) => b.wind - a.wind);
+    storms = next.slice(0, 14);
     buildStormEls();
     buildStormList();
     stormsLoaded = true;
     $('#storm-count').textContent = storms.length ? ' · ' + storms.length : '';
-  } catch (e) { console.warn('storms unavailable:', e.message); $('#storm-count').textContent = ''; }
+  } catch (e) {
+    console.warn('storms unavailable:', e.message);
+    if (!stormsLoaded) $('#storm-count').textContent = '';
+    stormsSig = null;      // retry next poll rather than treating this as "no change"
+  }
   stormsLoading = false;
   syncStorms();
 }
@@ -2290,7 +2404,7 @@ function renderStorms() {
 }
 function stormTip(st) {
   return `<div class="tt-title">${svgIcon('cyclone')} ${escapeHtml(st.name)} · ${st.cat.label}</div>`
-    + `<div class="tt-meta">Max wind ${Math.round(st.wind)} km/h</div>`
+    + `<div class="tt-meta">Max wind ${Math.round(st.wind)} km/h · ${escapeHtml((st.srcs || []).join(" + "))}</div>`
     + (st.affected.length ? `<div class="tt-meta">Impact: ${escapeHtml(st.affected.slice(0, 4).join(', '))}</div>` : '')
     + `<span class="tt-sev" style="background:${st.cat.color}22;color:${st.cat.color};border:1px solid ${st.cat.color}66">Forecast track & cone shown</span>`;
 }
